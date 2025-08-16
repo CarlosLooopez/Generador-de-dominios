@@ -15,19 +15,80 @@
     />
   </head>
   <body>
-    <!-- Write your HTML code here, you can delete everything withing the body tags -->
-    <div class="container-fluid text-center">
-      <h1 class="mt-5">Hello Rigo!</h1>
-      <img src="./assets/img/rigo-baby.jpg" />
-      <p class="alert alert-warning mt-4">
-        If this text is <b>not</b> centered and <b>yellow</b>, you probably have
-        an error
-      </p>
-      <div class="fixed-bottom p-4">
-        Made with ❤️ by
-        <a href="https://www.4geeksacademy.com">4Geeks Academy</a>
-      </div>
-    </div>
+    <h1>Generador de Dominios</h1>
+    
+    <button onclick="generateNextDomain()">Generar siguiente dominio</button>
+    
+    <p id="domainDisplay" style="font-family: monospace; font-size: 18px; margin-top: 20px;"></p>
+    
+    <div id="domainList" style="margin-top: 30px;"></div>
+
+    <script>
+         // Arrays de palabras
+        let pronouns = ['the', 'our'];
+        let adjectives = ['great', 'big'];
+        let nouns = ['jogger', 'racoon'];
+        let extensions = ['com'];
+
+        // Variables para controlar las combinaciones
+        let currentIndex = 0;
+        let allDomains = [];
+        let generatedDomains = [];
+
+        // Función para generar todas las combinaciones posibles
+        function generateAllCombinations() {
+            allDomains = [];
+            
+            for (let i = 0; i < pronouns.length; i++) {
+                for (let j = 0; j < adjectives.length; j++) {
+                    for (let k = 0; k < nouns.length; k++) {
+                        for (let l = 0; l < extensions.length; l++) {
+                            let domain = pronouns[i] + adjectives[j] + nouns[k] + '.' + extensions[l];
+                            allDomains.push(domain);
+                        }
+                    }
+                }
+            }
+            
+            console.log(`Total de dominios posibles: ${allDomains.length}`);
+        }
+
+        // Función para generar el siguiente dominio
+        function generateNextDomain() {
+            if (allDomains.length === 0) {
+                generateAllCombinations();
+            }
+            
+            if (currentIndex >= allDomains.length) {
+                document.getElementById('domainDisplay').textContent = 'Ya se generaron todos los dominios posibles!';
+                return;
+            }
+            
+            let nextDomain = allDomains[currentIndex];
+            generatedDomains.push(nextDomain);
+            
+            // Mostrar el dominio actual
+            document.getElementById('domainDisplay').textContent = nextDomain;
+            
+            // Agregar a la lista
+            let domainList = document.getElementById('domainList');
+            let newDomain = document.createElement('div');
+            newDomain.textContent = `${currentIndex + 1}. ${nextDomain}`;
+            newDomain.style.fontFamily = 'monospace';
+            newDomain.style.margin = '5px 0';
+            domainList.appendChild(newDomain);
+            
+            currentIndex++;
+            
+            // Scroll automático hacia el último dominio
+            newDomain.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Inicializar al cargar la página
+        window.onload = function() {
+            generateAllCombinations();
+        }
+        </script>
 
     <!-- Do not delete this script tag, this is what connects your HTML with the Javascript code -->
     <script type="module" src="/app.js"></script>
